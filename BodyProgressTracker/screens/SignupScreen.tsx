@@ -13,37 +13,48 @@ type RootStackParamList = {
   Signup: undefined
 }
 
-type LoginScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>
+type SignupScreenProps = {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>
 }
 
 const BACKEND_URL = 'http://10.0.0.114:8000'
 
-export default function LoginScreen({ navigation }: LoginScreenProps) {
+export default function SignupScreen({ navigation }: SignupScreenProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [fullName, setFullName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
 
-  const handleLogin = async () => {
+  const handleSignup = async () => {
     if (loading) return
     setLoading(true)
     setError('')
+    setSuccess(false)
     try {
-      const res = await fetch(`${BACKEND_URL}/auth/login`, {
+      const res = await fetch(`${BACKEND_URL}/users/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, full_name: fullName })
       })
       if (!res.ok) {
         const data = await res.json()
-        setError(data.detail || 'login failed')
+        let errMsg = 'signup failed'
+        if (typeof data.detail === 'string') {
+          errMsg = data.detail
+        } else if (Array.isArray(data.detail) && data.detail.length && data.detail[0].msg) {
+          errMsg = data.detail[0].msg
+        } else if (data.msg) {
+          errMsg = data.msg
+        }
+        setError(errMsg)
         setLoading(false)
         return
       }
-      // login success
+      setSuccess(true)
       setLoading(false)
-      navigation.replace('Home')
+      navigation.replace('Login')
     } catch (e) {
       setError('network error')
       setLoading(false)
@@ -52,7 +63,13 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>login</Text>
+      <Text style={styles.title}>sign up</Text>
+      <TextInput
+        value={fullName}
+        onChangeText={setFullName}
+        placeholder="full name"
+        autoCapitalize="words"
+      />
       <TextInput
         value={email}
         onChangeText={setEmail}
@@ -67,11 +84,10 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         secureTextEntry
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <Button title={loading ? 'logging in...' : 'login'} onPress={handleLogin} />
-      <TouchableOpacity onPress={() => navigation.replace('Signup')} style={{ marginTop: 16 }}>
-        <Text style={{ color: '#222', textDecorationLine: 'underline' }}>
-          don't have an account? sign up
-        </Text>
+      {success ? <Text style={styles.success}>account created! please log in</Text> : null}
+      <Button title={loading ? 'signing up...' : 'sign up'} onPress={handleSignup} />
+      <TouchableOpacity onPress={() => navigation.replace('Login')} style={styles.linkContainer}>
+        <Text style={styles.link}>already have an account? log in</Text>
       </TouchableOpacity>
     </View>
   )
@@ -91,5 +107,16 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     marginVertical: 8
+  },
+  success: {
+    color: 'green',
+    marginVertical: 8
+  },
+  linkContainer: {
+    marginTop: 16
+  },
+  link: {
+    color: '#222',
+    textDecorationLine: 'underline'
   }
 }) 

@@ -14,6 +14,7 @@ import Card from './components/Card'
 import TextInput from './components/TextInput'
 import Button from './components/Button'
 import LoginScreen from './screens/LoginScreen'
+import SignupScreen from './screens/SignupScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -23,6 +24,7 @@ type RootStackParamList = {
   'Progress Graph': undefined
   Settings: undefined
   Login: undefined
+  Signup: undefined
 }
 
 function HomeScreen({ navigation }: { navigation: NativeStackNavigationProp<RootStackParamList, 'Home'> }) {
@@ -72,6 +74,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Upload Photo" component={UploadPhotoScreen} />
         <Stack.Screen name="Progress Graph" component={ProgressGraphScreen} />
