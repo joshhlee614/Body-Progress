@@ -63,4 +63,7 @@ web-build/
 
 # Documentation
 architecture.md
-tasks.md 
+tasks.md
+
+# prevent committing local environment variables
+.env 
