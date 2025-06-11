@@ -10,6 +10,9 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { View, Text } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import Card from './components/Card'
+import TextInput from './components/TextInput'
+import Button from './components/Button'
 
 const Stack = createNativeStackNavigator()
 
@@ -21,9 +24,16 @@ type RootStackParamList = {
 }
 
 function HomeScreen({ navigation }: { navigation: NativeStackNavigationProp<RootStackParamList, 'Home'> }) {
+  const [value, setValue] = React.useState('')
+  const [msg, setMsg] = React.useState('')
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>home screen</Text>
+      <TextInput value={value} onChangeText={setValue} placeholder="type something" />
+      <Button title="show in card" onPress={() => setMsg(value)} />
+      <Card>
+        <Text>{msg}</Text>
+      </Card>
       <Text style={{ margin: 8 }} onPress={() => navigation.navigate('Upload Photo')}>go to upload photo</Text>
       <Text style={{ margin: 8 }} onPress={() => navigation.navigate('Progress Graph')}>go to progress graph</Text>
       <Text style={{ margin: 8 }} onPress={() => navigation.navigate('Settings')}>go to settings</Text>
