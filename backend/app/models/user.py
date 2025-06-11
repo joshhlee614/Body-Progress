@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, func, Boolean
+from sqlalchemy import Column, String, DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -6,10 +6,9 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = "users"
-    __table_args__ = {'schema': 'auth'}  # use Supabase's auth schema
+    __table_args__ = {'schema': 'public'}  # use public schema instead of auth
 
     id = Column(UUID(as_uuid=True), primary_key=True)
     email = Column(String, unique=True, nullable=False)
-    created_at = Column(DateTime(timezone=True), nullable=False)
-    is_sso_user = Column(Boolean, nullable=False, default=False)
-    is_anonymous = Column(Boolean, nullable=False, default=False) 
+    full_name = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False) 
