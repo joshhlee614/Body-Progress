@@ -26,7 +26,7 @@ async def register_user(user_data: UserCreate, db: AsyncSession = Depends(get_db
         # Create user in Supabase Auth
         auth_response = supabase.auth.admin.create_user({
             "email": user_data.email,
-            "password": "temp_password_123",  # Temporary password
+            "password": user_data.password,
             "email_confirm": True
         })
         
