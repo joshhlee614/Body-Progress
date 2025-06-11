@@ -13,6 +13,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import Card from './components/Card'
 import TextInput from './components/TextInput'
 import Button from './components/Button'
+import LoginScreen from './screens/LoginScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -21,6 +22,7 @@ type RootStackParamList = {
   'Upload Photo': undefined
   'Progress Graph': undefined
   Settings: undefined
+  Login: undefined
 }
 
 function HomeScreen({ navigation }: { navigation: NativeStackNavigationProp<RootStackParamList, 'Home'> }) {
@@ -68,7 +70,8 @@ function SettingsScreen() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Upload Photo" component={UploadPhotoScreen} />
         <Stack.Screen name="Progress Graph" component={ProgressGraphScreen} />
