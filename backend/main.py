@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import asyncpg
 import os
 from dotenv import load_dotenv
+from app.api.users.router import router as users_router
 
 load_dotenv()
 
@@ -16,6 +17,9 @@ async def startup():
 @app.on_event('shutdown')
 async def shutdown():
     await db_pool.close()
+
+# include routers
+app.include_router(users_router)
 
 @app.get('/')
 def read_root():
