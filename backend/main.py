@@ -3,6 +3,7 @@ import asyncpg
 import os
 from dotenv import load_dotenv
 from app.api.users.router import router as users_router
+from app.api.auth.router import router as auth_router
 
 load_dotenv()
 
@@ -20,6 +21,7 @@ async def shutdown():
 
 # include routers
 app.include_router(users_router)
+app.include_router(auth_router)
 
 @app.get('/')
 def read_root():
